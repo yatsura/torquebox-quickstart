@@ -16,14 +16,7 @@
 FORCE_BUILD=false               # set to true to force build
 VERSION=LATEST
 
-# Determine whether we're getting a release or an incremental 
-if [[ ${VERSION} =~ \. ]]; then
-    # Official release, e.g. 0.9.0
-    URL=http://repository-projectodd.forge.cloudbees.com/release/org/torquebox/torquebox-dist/${VERSION}/torquebox-dist-${VERSION}-bin.zip
-else
-    # Incremental build, e.g. 999 or LATEST
-    URL=http://repository-projectodd.forge.cloudbees.com/incremental/torquebox/${VERSION}/torquebox-dist-bin.zip
-fi
+URL=http://immutant.org/builds/torquebox-immutant.zip
 
 pushd ${OPENSHIFT_DATA_DIR} >/dev/null
 if [[ ${FORCE_BUILD} == true ]]; then
@@ -33,15 +26,16 @@ fi
 if [ ! -d torquebox ]; then
     rm -rf torquebox*
     wget -nv ${URL}
-    unzip -q torquebox-dist-*.zip
-    rm torquebox-dist-*.zip
+    unzip -q torquebox-immutant.zip
+    rm torquebox-immutant.zip
     ln -s torquebox-* torquebox
     echo "Installed" torquebox-*
 fi
 popd >/dev/null
 
-# Required TorqueBox environment variables
+# Required environment variables
 export TORQUEBOX_HOME=$OPENSHIFT_DATA_DIR/torquebox
+export IMMUTANT_HOME=$TORQUEBOX_HOME
 export JRUBY_HOME=$TORQUEBOX_HOME/jruby
 export PATH=$JRUBY_HOME/bin:$PATH
 
