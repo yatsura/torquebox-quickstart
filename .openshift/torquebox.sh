@@ -49,15 +49,19 @@ export PATH=$JRUBY_HOME/bin:$PATH
 export JBOSS_MODULEPATH_ADD=$TORQUEBOX_HOME/jboss/modules/system/layers/base:$TORQUEBOX_HOME/jboss/modules
 
 function bundle_install() {
-    if [ ! -d "${OPENSHIFT_REPO_DIR}/.bundle" ] && [ -f "${OPENSHIFT_REPO_DIR}/Gemfile" ]; then
-        pushd ${OPENSHIFT_REPO_DIR} > /dev/null
-        jruby -J-Xmx256m -J-Dhttps.protocols=SSLv3 -S bundle install
-        popd > /dev/null
-    fi
+    find ${OPENSHIFT_REPO_DIR} -maxdepth 1 -type d -print0 | while read -d $'\0' dir
+    do
+        if [ ! -d "${dir}/.bundle" ] && [ -f "${dir}/Gemfile" ]; then
+            pushd ${dir} > /dev/null
+            jruby -J-Xmx256m -J-Dhttps.protocols=SSLv3 -S bundle install
+            popd > /dev/null
+        fi
+    done
 }
 
 function db_migrate() {
-    pushd ${OPENSHIFT_REPO_DIR} > /dev/null
+    local dir=${1:-$OPENSHIFT_REPO_DIR}
+    pushd ${dir} > /dev/null
     bundle exec rake db:migrate RAILS_ENV="production"
     popd > /dev/null
 }
