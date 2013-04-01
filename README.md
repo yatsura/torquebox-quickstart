@@ -1,13 +1,11 @@
-TorqueBox on OpenShift
+TorqueBox/Immutant Overlay on OpenShift
 =========================
 
-Here is a quick way to try out your Ruby application running in
-TorqueBox on OpenShift.
+Here is a quick way to try out your Ruby and Clojure apps running in
+a TorqueBox overlaid with Immutant on OpenShift.
 
 By default, this quickstart will install the latest incremental
-version of TorqueBox. You can specify a different version by tweaking
-`.openshift/action_hooks/pre_start_jbossas-7`, but any build older 
-than incremental 1294 won't work. ;-)
+version of TorqueBox.
 
 Running on OpenShift
 --------------------
@@ -26,7 +24,7 @@ Remove the sample app provided by the jbossas-7 cartridge
 Add this upstream repo
 
     git remote add upstream -m master git://github.com/openshift-quickstart/torquebox-quickstart.git
-    git pull -s recursive -X theirs upstream master
+    git pull --no-commit -s recursive -X theirs upstream overlay
 
 Then add, commit, and push your changes
 
@@ -38,11 +36,13 @@ That's it! The first build will take a minute or two, even after the
 push completes, so be patient. You should ssh to your app and run
 `tail_all` so you'll have something to watch while your app deploys.
 
-When you see `Deployed "your-knob.yml` in the log, point a browser at
-the following link (adjusted for your namespace) and you should see a
-friendly welcome:
+When you see `Deployed "your-knob.yml"` and `Deployed
+"your-clojure-app.clj"` in the log, point a browser at the following
+links (adjusted for your namespace) and you should see a friendly
+welcome:
 
-    http://yourapp-$namespace.rhcloud.com
+    http://yourapp-$namespace.rhcloud.com/ruby
+    http://yourapp-$namespace.rhcloud.com/clojure
 
 Drop in to the `#torquebox` IRC channel on freenode.net if you have any
 questions.
