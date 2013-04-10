@@ -1,5 +1,5 @@
 TorqueBox/Immutant Overlay on OpenShift
-=========================
+=======================================
 
 Here is a quick way to try out your Ruby and Clojure apps running in
 a TorqueBox overlaid with Immutant on OpenShift.
@@ -23,8 +23,8 @@ Remove the sample app provided by the jbossas-7 cartridge
 
 Add this upstream repo
 
-    git remote add upstream -m master git://github.com/openshift-quickstart/torquebox-quickstart.git
-    git pull --no-commit -s recursive -X theirs upstream overlay
+    git remote add quickstart -m master git://github.com/openshift-quickstart/torquebox-quickstart.git
+    git pull --no-commit -s recursive -X theirs quickstart overlay
 
 Then add, commit, and push your changes
 
