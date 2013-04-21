@@ -13,26 +13,6 @@
 # Application start and stop is subject to different timeouts
 # throughout the system.
 
-FORCE_BUILD=false               # set to true to force build
-VERSION=LATEST
-
-URL=http://immutant.org/builds/torquebox-immutant.zip
-
-pushd ${OPENSHIFT_DATA_DIR} >/dev/null
-if [[ ${FORCE_BUILD} == true ]]; then
-    rm -f torquebox
-fi
-# Download/explode the dist and symlink it to torquebox
-if [ ! -d torquebox ]; then
-    rm -rf torquebox*
-    wget -nv ${URL}
-    unzip -q torquebox-immutant.zip
-    rm torquebox-immutant.zip
-    ln -s torquebox-* torquebox
-    echo "Installed" torquebox-*
-fi
-popd >/dev/null
-
 # Required environment variables
 export TORQUEBOX_HOME=$OPENSHIFT_DATA_DIR/torquebox
 export IMMUTANT_HOME=$TORQUEBOX_HOME
@@ -41,6 +21,19 @@ export PATH=$JRUBY_HOME/bin:$PATH
 
 # Insert the TorqueBox modules before the jbossas-7 ones
 export JBOSS_MODULEPATH_ADD=$TORQUEBOX_HOME/jboss/modules/system/layers/base:$TORQUEBOX_HOME/jboss/modules
+
+function torquebox_install() {
+    local VERSION=${1:-LATEST}
+    URL=http://immutant.org/builds/torquebox-immutant.zip
+    pushd ${OPENSHIFT_DATA_DIR} >/dev/null
+    rm -rf torquebox*
+    wget -nv ${URL}
+    unzip -q torquebox-immutant.zip
+    rm torquebox-immutant.zip
+    ln -s torquebox-* torquebox
+    echo "Installed" torquebox-*
+    popd >/dev/null
+}
 
 function bundle_install() {
     find ${OPENSHIFT_REPO_DIR} -maxdepth 1 -type d -print0 | while read -d $'\0' dir
