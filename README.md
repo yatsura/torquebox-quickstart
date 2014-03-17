@@ -47,29 +47,29 @@ Drop in to the `#torquebox` IRC channel on freenode.net if you have any
 questions.
 
 
-## Zero Downtime Deployments
+## Faster development deployments
 
-If you'd like to take advantage of zero downtime deployments provided
-by TorqueBox, you'll need to add an OpenShift-specific `hot_deploy`
-marker file to tell OpenShift not to restart TorqueBox and the
-TorqueBox-specific zero downtime deployment marker.
+If you'd like to take advantage of faster deployments provided by 
+TorqueBox, you'll need to trigger the TorqueBox-specific restart marker
+and start using rhc deploy.
 
-    touch .openshift/markers/hot_deploy
-    git add .openshift/markers/hot_deploy
+
+    rhc app-configure --no-auto-deploy # Configure your application to disable auto deploy (only need to run this once)
     mkdir -p tmp
     touch tmp/restart.txt
     git add tmp/restart.txt
-    git commit -m "Use zero downtime deploys for the web runtime"
+    git commit -m "Use faster deploys for the web runtime"
     git push
+    rhc deploy --hot-deploy
+    
 
 Now every time you push code the TorqueBox web runtime will be
 restarted without dropping any web requests. See
 http://torquebox.org/documentation/current/deployment.html#zero-downtime-redeployment
 for the different markers you can use to restart non-web runtimes.
 
-To switch back to regular deployments, remove
-`.openshift/markers/hot_deploy` and `tmp/restart.txt`, commit, and
-push the application.
+To switch back to regular deployments, remove `tmp/restart.txt`, commit,
+push the application, and stop using --hot-deploy with rhc deploy.
 
 
 ## Database Migrations
